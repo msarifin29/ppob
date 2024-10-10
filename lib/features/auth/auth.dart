@@ -1,0 +1,9 @@
+export 'domain/login_response.dart';
+export 'data/data_sources/auth_locale_datasource.dart';
+export 'data/data_sources/auth_remote_dataosource.dart';
+export 'data/repositories/auth_repository.dart';
+export 'presentation/pages/login_page.dart';
+export 'presentation/state/register.dart';
+export 'presentation/state/login.dart';
+export 'presentation/pages/register_page.dart';
+export 'presentation/widgets/header_login.dart';
