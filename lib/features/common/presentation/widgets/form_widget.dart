@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class FormWidget extends StatelessWidget {
   const FormWidget({
     super.key,
-    required this.controller,
+    this.controller,
     required this.hintText,
     this.validator,
     this.onChanged,
@@ -11,9 +11,11 @@ class FormWidget extends StatelessWidget {
     this.keyboardType,
     this.prefixIcon,
     this.suffixIcon,
+    this.readOnly = false,
+    this.onTap,
   });
 
-  final TextEditingController controller;
+  final TextEditingController? controller;
   final String hintText;
   final String? Function(String?)? validator;
   final String? Function(String?)? onChanged;
@@ -21,6 +23,8 @@ class FormWidget extends StatelessWidget {
   final TextInputType? keyboardType;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
+  final bool readOnly;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,8 @@ class FormWidget extends StatelessWidget {
       style: Theme.of(context).textTheme.bodyMedium!,
       controller: controller,
       keyboardType: keyboardType,
+      readOnly: readOnly,
+      onTap: onTap,
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,

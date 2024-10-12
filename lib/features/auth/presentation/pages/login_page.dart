@@ -44,7 +44,7 @@ class _LoginPageState extends State<LoginPage> {
               FormWidget(
                 controller: emailController,
                 hintText: 'masukkan email anda',
-                prefixIcon: const Icon(Icons.alternate_email),
+                prefixIcon: const Icon(Icons.alternate_email, size: 20),
                 validator: (v) {
                   final bool isValid = EmailValidator.validate(emailController.text.trim());
                   if (v == null || v.isEmpty) {
@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                           isVisible.value
                               ? Icons.visibility_off_outlined
                               : Icons.visibility_outlined,
+                          size: 20,
                           color: Colors.grey,
                         ),
                       ),
@@ -87,15 +88,18 @@ class _LoginPageState extends State<LoginPage> {
                   }),
               const Gap(30),
               Consumer<LoginProvider>(
-                builder: (context, login, _) {
-                  if (!login.isLoading && login.errorMessage == null) {
+                builder: (context, login, child) {
+                  if (login.isLoading) {
+                    return const CircularProgressIndicator();
+                  } else if (login.isSuccess && login.errorMessage == null) {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, MainPage.routeName, ModalRoute.withName('/'));
+                        context,
+                        MainPage.routeName,
+                        (route) => false,
+                      );
                     });
-                  }
-
-                  if (login.errorMessage != null) {
+                  } else if (login.errorMessage != null) {
                     WidgetsBinding.instance.addPostFrameCallback(
                       (_) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -107,20 +111,18 @@ class _LoginPageState extends State<LoginPage> {
                       },
                     );
                   }
-                  return login.isLoading
-                      ? const CircularProgressIndicator()
-                      : PrimaryButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              final param = LoginParam(
-                                email: emailController.text,
-                                password: pwdController.text,
-                              );
-                              login.call(param);
-                            }
-                          },
-                          text: 'Masuk',
+                  return PrimaryButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        final param = LoginParam(
+                          email: emailController.text,
+                          password: pwdController.text,
                         );
+                        login.call(param);
+                      }
+                    },
+                    text: 'Masuk',
+                  );
                 },
               ),
               const Gap(20),
@@ -131,7 +133,10 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, RegisterPage.routeName, ModalRoute.withName('/'));
+                        context,
+                        RegisterPage.routeName,
+                        (route) => false,
+                      );
                     },
                     child: Text(
                       'di sini',

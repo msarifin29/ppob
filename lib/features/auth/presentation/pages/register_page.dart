@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
               FormWidget(
                 controller: emailController,
                 hintText: 'masukkan email anda',
-                prefixIcon: const Icon(Icons.alternate_email),
+                prefixIcon: const Icon(Icons.alternate_email, size: 20),
                 validator: (v) {
                   final bool isValid = EmailValidator.validate(emailController.text.trim());
                   if (v == null || v.isEmpty) {
@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
               FormWidget(
                 controller: firstNameController,
                 hintText: 'nama depan',
-                prefixIcon: const Icon(Icons.person_outline_outlined),
+                prefixIcon: const Icon(Icons.person_outline_outlined, size: 20),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
                     return 'nama depan tidak boleh kosong';
@@ -78,7 +78,7 @@ class _RegisterPageState extends State<RegisterPage> {
               FormWidget(
                 controller: lastNameController,
                 hintText: 'nama belakang',
-                prefixIcon: const Icon(Icons.person_outline_outlined),
+                prefixIcon: const Icon(Icons.person_outline_outlined, size: 20),
                 validator: (v) {
                   if (v == null || v.isEmpty) {
                     return 'nama belakang tidak boleh kosong';
@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   return FormWidget(
                     controller: pwdController,
                     hintText: 'buat password',
-                    prefixIcon: const Icon(Icons.lock_open_outlined),
+                    prefixIcon: const Icon(Icons.lock_open_outlined, size: 20),
                     obscureText: isVisible.value,
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -122,7 +122,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   return FormWidget(
                     controller: confirmPwdController,
                     hintText: 'konfirmasi password',
-                    prefixIcon: const Icon(Icons.lock_open_outlined),
+                    prefixIcon: const Icon(Icons.lock_open_outlined, size: 20),
                     obscureText: isConfirmVisible.value,
                     suffixIcon: IconButton(
                       onPressed: () {
@@ -150,10 +150,19 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const Gap(30),
               Consumer<RegisterProvider>(builder: (context, register, _) {
-                if (!register.isLoading && register.errorMessage == null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, LoginPage.routeName, ModalRoute.withName('/'));
+                if (register.isSuccess && register.errorMessage == null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Register sukses'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    await Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      LoginPage.routeName,
+                      (route) => false,
+                    );
                   });
                 }
                 if (register.errorMessage != null) {
@@ -193,7 +202,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextButton(
                     onPressed: () {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, LoginPage.routeName, ModalRoute.withName('/'));
+                        context,
+                        LoginPage.routeName,
+                        (route) => false,
+                      );
                     },
                     child: Text(
                       'di sini',

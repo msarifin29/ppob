@@ -6,24 +6,35 @@ import 'package:ppob/core/core.dart';
 
 import 'package:ppob/features/auth/auth.dart';
 
-class RegisterProvider with ChangeNotifier {
+class LoginProvider with ChangeNotifier {
   final AuthRepository repository;
-  RegisterProvider({required this.repository});
+  LoginProvider({required this.repository});
 
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isSuccess = false;
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  bool get isSuccess => _isSuccess;
 
-  Future<void> call(RegisterParam param) async {
+  Future<void> unAuthorize() async {
+    await repository.removeToken();
+    _isSuccess = false;
+    notifyListeners();
+  }
+
+  Future<void> call(LoginParam param) async {
     _setLoading(true);
     try {
-      await repository.register(param);
+      final response = await repository.login(param);
+      if (response != null) {
+        _isSuccess = await repository.saveToken(response.token);
+      }
     } on ApiException catch (e) {
       _setError(e.message);
     } catch (e) {
-      log('error register-> ${e.toString()}');
+      log('error login-> ${e.toString()}');
       _setError('Something wrong!');
     }
     _setLoading(false);

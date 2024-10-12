@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ppob/core/core.dart';
@@ -20,8 +22,7 @@ class _SplashPageState extends State<SplashPage> {
 
   void loadingProccess() async {
     Future.delayed(const Duration(seconds: 2)).then((_) {
-      if (!mounted) return;
-      Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, ModalRoute.withName('/'));
+      Navigator.pushNamedAndRemoveUntil(context, LoginPage.routeName, (route) => false);
     });
   }
 

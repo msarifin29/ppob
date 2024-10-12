@@ -41,6 +41,7 @@ class HeaderLoginOrRegister extends StatelessWidget {
           child: Text(
             title,
             overflow: TextOverflow.clip,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
