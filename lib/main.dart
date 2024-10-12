@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ppob/features/auth/auth.dart';
 import 'package:ppob/features/common/common.dart';
+import 'package:ppob/features/transaction/transaction.dart';
 import 'package:provider/provider.dart';
 
 import 'core/core.dart';
@@ -24,6 +25,10 @@ FutureOr<void> main() async {
 
   final commonRemoteDatasource = CommonRemoteDatasourceImpl(dio: dio);
   final commonRepository = CommonRepositoryImpl(remoteDatasource: commonRemoteDatasource);
+  final transactionRemoteDatasource = TransactionRemoteDatasourceImpl(dio: dio);
+  final transactionRepository = TransactionRepositoryImpl(
+    remoteDatasource: transactionRemoteDatasource,
+  );
 
   runZonedGuarded(
     () async {
@@ -34,6 +39,7 @@ FutureOr<void> main() async {
         ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
         ChangeNotifierProvider(create: (_) => BannerProvider(repository: commonRepository)),
         ChangeNotifierProvider(create: (_) => ServiceProvider(repository: commonRepository)),
+        ChangeNotifierProvider(create: (_) => BalanceProvider(repository: transactionRepository)),
       ], child: const MyApp()));
     },
     (error, stackTrace) {

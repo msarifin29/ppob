@@ -15,7 +15,7 @@ class ServicesWidget extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      height: MediaQuery.sizeOf(context).height * 0.3,
+      height: MediaQuery.sizeOf(context).height * 0.25,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: FutureBuilder(
         future: fetch(),
@@ -40,7 +40,7 @@ class ServicesWidget extends StatelessWidget {
                   crossAxisCount: 6,
                   crossAxisSpacing: 6,
                   mainAxisSpacing: 20,
-                  mainAxisExtent: 80,
+                  mainAxisExtent: 60,
                 ),
                 itemCount: (service.result ?? []).length,
                 itemBuilder: (context, i) {
