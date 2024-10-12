@@ -10,17 +10,21 @@ import 'package:provider/provider.dart';
 import 'core/core.dart';
 
 FutureOr<void> main() async {
-  final dio = Dio();
-  dio.interceptors.add(DioLoggingInterceptor(dio));
-
   final localeDataSource = AuthLocaleDataSourceImpl();
   final remoteDataSource = AuthRemoteDataosourceImpl();
   final authRepository = AuthRepositoryImpl(
     localeDataSource: localeDataSource,
     remoteDataosource: remoteDataSource,
   );
+
+  final dio = Dio();
+  dio.interceptors.add(DioLoggingInterceptor(dio));
   final profileRemoteDatasource = ProfileRemoteDatasourceImpl(dio: dio);
   final profileRepository = ProfileRepositoryImpl(remoteDatasource: profileRemoteDatasource);
+
+  final commonRemoteDatasource = CommonRemoteDatasourceImpl(dio: dio);
+  final commonRepository = CommonRepositoryImpl(remoteDatasource: commonRemoteDatasource);
+
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +32,8 @@ FutureOr<void> main() async {
         ChangeNotifierProvider(create: (_) => LoginProvider(repository: authRepository)),
         ChangeNotifierProvider(create: (_) => RegisterProvider(repository: authRepository)),
         ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
+        ChangeNotifierProvider(create: (_) => BannerProvider(repository: commonRepository)),
+        ChangeNotifierProvider(create: (_) => ServiceProvider(repository: commonRepository)),
       ], child: const MyApp()));
     },
     (error, stackTrace) {

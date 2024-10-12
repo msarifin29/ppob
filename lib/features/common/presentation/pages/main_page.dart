@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ppob/features/auth/auth.dart';
 import 'package:ppob/features/common/common.dart';
-import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   static const routeName = 'main';
@@ -13,12 +12,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final currentIndex = ValueNotifier<int>(0);
-
-  @override
-  void initState() {
-    context.read<ProfileProvider>().fetch();
-    super.initState();
-  }
 
   void selectedTab(int index) {
     currentIndex.value = index;
