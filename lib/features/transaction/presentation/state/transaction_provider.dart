@@ -14,12 +14,14 @@ class TransactionProvider with ChangeNotifier {
   bool _isLoading = false;
   final bool _isLoadingUpdate = false;
   bool _isUpdate = false;
+  bool _isUpdatePayment = false;
   String? _errorMessage;
 
   BalanceResponse? get result => _result;
   bool get isLoading => _isLoading;
   bool get isLoadingUpdate => _isLoadingUpdate;
   bool get isUpdate => _isUpdate;
+  bool get isUpdatePayment => _isUpdatePayment;
   String? get errorMessage => _errorMessage;
 
   Future<void> balance() async {
@@ -47,10 +49,27 @@ class TransactionProvider with ChangeNotifier {
     } on ApiException catch (e) {
       _setMessage(e.message);
     } catch (e) {
-      log('exception balance -> ${e.toString()}');
+      log('exception topup -> ${e.toString()}');
       _setMessage('Something wrong');
     } finally {
       _setUpdate(true);
+      _setStatus(false);
+    }
+  }
+
+  Future<void> payment(String serviceCode) async {
+    _setStatus(true);
+    _setUpdatePayment(false);
+    _setMessage(null);
+    try {
+      await repository.payment(PaymentParam(serviceCode: serviceCode));
+    } on ApiException catch (e) {
+      _setMessage(e.message);
+    } catch (e) {
+      log('exception payment -> ${e.toString()}');
+      _setMessage('Something wrong');
+    } finally {
+      _setUpdatePayment(true);
       _setStatus(false);
     }
   }
@@ -72,6 +91,16 @@ class TransactionProvider with ChangeNotifier {
 
   void _setUpdate(bool status) {
     _isUpdate = status;
+    notifyListeners();
+  }
+
+  void _setUpdatePayment(bool status) {
+    _isUpdatePayment = status;
+    notifyListeners();
+  }
+
+  void resetUpdatePayment() {
+    _isUpdatePayment = false;
     notifyListeners();
   }
 }

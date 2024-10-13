@@ -5,6 +5,8 @@ import 'package:ppob/core/core.dart';
 Future<T?> confirmTopUp<T>({
   required BuildContext context,
   String amount = '',
+  String messsage = 'Anda yakin untuk Top Up sebesar',
+  String titleButton = 'Top Up',
   VoidCallback? onPressed,
 }) {
   return showDialog(
@@ -27,11 +29,11 @@ Future<T?> confirmTopUp<T>({
               ),
               const Gap(20),
               Text(
-                'Anda yakin untuk Top Up sebesar',
+                '$messsage senilai',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               Text(
-                'Rp$amount',
+                'Rp $amount',
                 style: Theme.of(context)
                     .textTheme
                     .headlineSmall!
@@ -40,7 +42,7 @@ Future<T?> confirmTopUp<T>({
               TextButton(
                 onPressed: onPressed,
                 child: Text(
-                  'Ya, lanjutkan Top Up',
+                  'Ya, lanjutkan $titleButton',
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
@@ -108,6 +110,54 @@ Future<T?> dialogSuccessOrFailure<T>({
               ),
               Text(
                 isSuccess ? 'berhasil!' : 'gagal',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Kembali ke beranda',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+Future<T?> insufficientBalance<T>({
+  required BuildContext context,
+}) {
+  return showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        child: Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 50,
+                width: 50,
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.red),
+                child: const Icon(
+                  Icons.close,
+                  size: 30,
+                  color: Colors.white,
+                ),
+              ),
+              const Gap(20),
+              Text(
+                'Maaf, Saldo anda tidak cukup',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
               TextButton(

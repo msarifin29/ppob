@@ -26,6 +26,7 @@ class LoginProvider with ChangeNotifier {
 
   Future<void> call(LoginParam param) async {
     _setLoading(true);
+    _setError(null);
     try {
       final response = await repository.login(param);
       if (response != null) {

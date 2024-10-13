@@ -6,3 +6,4 @@ export 'presentation/widgets/balance_widget.dart';
 export 'presentation/widgets/top_up_widget.dart';
 export 'presentation/widgets/dialog_transaction.dart';
 export 'presentation/pages/top_up_page.dart';
+export 'presentation/pages/payment_page.dart';

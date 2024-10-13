@@ -8,6 +8,7 @@ import 'package:ppob/features/transaction/transaction.dart';
 abstract class TransactionRemoteDatasource {
   Future<BalanceResponse> balance();
   Future<BalanceResponse> topup(TopUpParam param);
+  Future<bool> payment(PaymentParam param);
 }
 
 class TransactionRemoteDatasourceImpl implements TransactionRemoteDatasource {
@@ -64,6 +65,33 @@ class TransactionRemoteDatasourceImpl implements TransactionRemoteDatasource {
       rethrow;
     }
   }
+
+  @override
+  Future<bool> payment(PaymentParam param) async {
+    const path = '${ApiUrl.endPoint}/transaction';
+    try {
+      await dio.post(
+        path,
+        options: Options(
+          headers: {BaseUrlConfig.requiredToken: true},
+        ),
+        data: param.toMap(),
+      );
+      return true;
+    } on DioException catch (e) {
+      if (e.response != null && e.response?.data is Map<String, dynamic>) {
+        final errorJsonData = e.response?.data as Map<String, dynamic>;
+        final message = errorJsonData['message'] ?? 'Unknown error';
+        final status = errorJsonData['status'] ?? e.response?.statusCode;
+        throw ApiException(status, message);
+      } else {
+        DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
 
 class TopUpParam extends Equatable {
@@ -80,4 +108,20 @@ class TopUpParam extends Equatable {
 
   @override
   List<Object?> get props => [topUpAmount];
+}
+
+class PaymentParam extends Equatable {
+  final String serviceCode;
+  const PaymentParam({
+    required this.serviceCode,
+  });
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> data = {};
+    data['service_code'] = serviceCode;
+    return data;
+  }
+
+  @override
+  List<Object?> get props => [serviceCode];
 }

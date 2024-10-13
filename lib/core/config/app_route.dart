@@ -71,6 +71,22 @@ class AppRoute {
             return const TopUpPage();
           },
         );
+      case PaymentPage.routeName:
+        final arguments = settings.arguments as Map<String, dynamic>;
+        final serviceIcon = arguments['serviceIcon'] as String;
+        final serviceName = arguments['serviceName'] as String;
+        final serviceCode = arguments['serviceCode'] as String;
+        final amount = arguments['amount'] as String;
+        return MaterialPageRoute(
+          builder: (context) {
+            return PaymentPage(
+              serviceIcon: serviceIcon,
+              serviceName: serviceName,
+              serviceCode: serviceCode,
+              amount: amount,
+            );
+          },
+        );
 
       default:
         return MaterialPageRoute(

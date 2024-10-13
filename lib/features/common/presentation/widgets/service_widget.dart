@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:ppob/features/common/common.dart';
+import 'package:ppob/features/transaction/transaction.dart';
 import 'package:provider/provider.dart';
 
 class ServicesWidget extends StatelessWidget {
@@ -33,6 +34,7 @@ class ServicesWidget extends StatelessWidget {
           }
           return Consumer<ServiceProvider>(
             builder: (context, service, child) {
+              final result = service.result ?? [];
               return GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -42,38 +44,52 @@ class ServicesWidget extends StatelessWidget {
                   mainAxisSpacing: 20,
                   mainAxisExtent: 60,
                 ),
-                itemCount: (service.result ?? []).length,
+                itemCount: result.length,
                 itemBuilder: (context, i) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: CachedNetworkImage(
-                          imageUrl: (service.result ?? [])[i].serviceIcon,
-                          fit: BoxFit.cover,
-                          height: 40,
-                          width: 40,
-                          progressIndicatorBuilder: (context, url, downloadProgress) => Container(
-                            height: 30,
-                            width: 30,
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator(value: downloadProgress.progress),
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        PaymentPage.routeName,
+                        arguments: {
+                          'serviceIcon': result[i].serviceIcon,
+                          'serviceName': result[i].serviceName,
+                          'serviceCode': result[i].serviceCode,
+                          'amount': '${result[i].serviceTariff}',
+                        },
+                      );
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                          child: CachedNetworkImage(
+                            imageUrl: (service.result ?? [])[i].serviceIcon,
+                            fit: BoxFit.cover,
+                            height: 40,
+                            width: 40,
+                            progressIndicatorBuilder: (context, url, downloadProgress) => Container(
+                              height: 30,
+                              width: 30,
+                              alignment: Alignment.center,
+                              child: CircularProgressIndicator(value: downloadProgress.progress),
+                            ),
+                            errorWidget: (context, url, error) => const Icon(Icons.image),
                           ),
-                          errorWidget: (context, url, error) => const Icon(Icons.image),
                         ),
-                      ),
-                      const Gap(5),
-                      Expanded(
-                        child: Text(
-                          (service.result ?? [])[i].serviceName,
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                fontSize: 10,
-                              ),
+                        const Gap(5),
+                        Expanded(
+                          child: Text(
+                            (service.result ?? [])[i].serviceName,
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                                  fontSize: 10,
+                                ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   );
                 },
               );
