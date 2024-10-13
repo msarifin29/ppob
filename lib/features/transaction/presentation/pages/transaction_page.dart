@@ -40,36 +40,39 @@ class _TransactionPageState extends State<TransactionPage> {
             SizedBox(
               height: MediaQuery.sizeOf(context).height * 0.56,
               child: Consumer<TransactionHistoryProvider>(
-                builder: (context, provider, child) {
-                  if (provider.isLoading && provider.records.isEmpty) {
+                builder: (context, transaction, child) {
+                  if (transaction.records.isEmpty) {
+                    return const Center(child: Text('Belum ada data transaksi'));
+                  }
+                  if (transaction.isLoading && transaction.records.isEmpty) {
                     return const Center(child: CircularProgressIndicator());
                   }
 
-                  if (provider.errorMessage != null) {
-                    return Center(child: Text(provider.errorMessage!));
+                  if (transaction.errorMessage != null) {
+                    return Center(child: Text(transaction.errorMessage!));
                   }
 
                   return Column(
                     children: [
                       Expanded(
                         child: ListView.builder(
-                          itemCount: provider.records.length,
+                          itemCount: transaction.records.length,
                           itemBuilder: (context, index) {
-                            final record = provider.records[index];
+                            final record = transaction.records[index];
                             return TransactionCard(record: record);
                           },
                         ),
                       ),
-                      if (!provider.isLastPage)
+                      if (!transaction.isLastPage)
                         Padding(
                           padding: const EdgeInsets.all(8),
                           child: TextButton(
-                            onPressed: provider.isLoading
+                            onPressed: transaction.isLoading
                                 ? null
                                 : () {
-                                    provider.fetchTransactions(loadMore: true);
+                                    transaction.fetchTransactions(loadMore: true);
                                   },
-                            child: provider.isLoading
+                            child: transaction.isLoading
                                 ? const CircularProgressIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                                   )
