@@ -17,4 +17,16 @@ class CurrencyFormat {
 
     return formatter.format(number).replaceAll(',', '.');
   }
+
+  static String convertToWIB(String inputDate) {
+    DateTime utcDate = DateTime.parse(inputDate).toUtc();
+
+    DateTime wibDate = utcDate.add(const Duration(hours: 7));
+
+    DateFormat formatter = DateFormat('dd MMMM yyyy HH:mm', 'id_ID');
+
+    String formattedDate = formatter.format(wibDate);
+
+    return '$formattedDate WIB';
+  }
 }

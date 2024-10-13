@@ -9,6 +9,7 @@ abstract class TransactionRemoteDatasource {
   Future<BalanceResponse> balance();
   Future<BalanceResponse> topup(TopUpParam param);
   Future<bool> payment(PaymentParam param);
+  Future<TransactionResponse> transaction(int offset, int limit);
 }
 
 class TransactionRemoteDatasourceImpl implements TransactionRemoteDatasource {
@@ -78,6 +79,38 @@ class TransactionRemoteDatasourceImpl implements TransactionRemoteDatasource {
         data: param.toMap(),
       );
       return true;
+    } on DioException catch (e) {
+      if (e.response != null && e.response?.data is Map<String, dynamic>) {
+        final errorJsonData = e.response?.data as Map<String, dynamic>;
+        final message = errorJsonData['message'] ?? 'Unknown error';
+        final status = errorJsonData['status'] ?? e.response?.statusCode;
+        throw ApiException(status, message);
+      } else {
+        DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<TransactionResponse> transaction(int offset, int limit) async {
+    const path = '${ApiUrl.endPoint}/transaction/history';
+    try {
+      final response = await dio.get(
+        path,
+        options: Options(
+          headers: {BaseUrlConfig.requiredToken: true},
+        ),
+        queryParameters: {'offset': offset, 'limit': limit},
+      );
+      final data = TransactionResponse.fromJson(response.data['data']);
+      return TransactionResponse(
+        records: data.records,
+        offset: data.offset,
+        limit: data.limit,
+      );
     } on DioException catch (e) {
       if (e.response != null && e.response?.data is Map<String, dynamic>) {
         final errorJsonData = e.response?.data as Map<String, dynamic>;

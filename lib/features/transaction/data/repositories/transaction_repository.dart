@@ -5,6 +5,7 @@ abstract class TransactionRepository {
   Future<BalanceResponse> balance();
   Future<BalanceResponse> topup(TopUpParam param);
   Future<bool> payment(PaymentParam param);
+  Future<TransactionResponse> transaction(int offset, int limit);
 }
 
 class TransactionRepositoryImpl implements TransactionRepository {
@@ -24,5 +25,10 @@ class TransactionRepositoryImpl implements TransactionRepository {
   @override
   Future<bool> payment(PaymentParam param) async {
     return await remoteDatasource.payment(param);
+  }
+
+  @override
+  Future<TransactionResponse> transaction(int offset, int limit) async {
+    return await remoteDatasource.transaction(offset, limit);
   }
 }

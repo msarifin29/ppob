@@ -71,6 +71,7 @@ class AppRoute {
             return const TopUpPage();
           },
         );
+
       case PaymentPage.routeName:
         final arguments = settings.arguments as Map<String, dynamic>;
         final serviceIcon = arguments['serviceIcon'] as String;
@@ -85,6 +86,13 @@ class AppRoute {
               serviceCode: serviceCode,
               amount: amount,
             );
+          },
+        );
+
+      case TransactionPage.routeName:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const TransactionPage();
           },
         );
 
