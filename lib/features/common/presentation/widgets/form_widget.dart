@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class FormWidget extends StatelessWidget {
   const FormWidget({
@@ -13,6 +14,8 @@ class FormWidget extends StatelessWidget {
     this.suffixIcon,
     this.readOnly = false,
     this.onTap,
+    this.onFieldSubmitted,
+    this.inputFormatters,
   });
 
   final TextEditingController? controller;
@@ -25,6 +28,8 @@ class FormWidget extends StatelessWidget {
   final Widget? suffixIcon;
   final bool readOnly;
   final Function()? onTap;
+  final Function(String)? onFieldSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +49,8 @@ class FormWidget extends StatelessWidget {
       validator: validator,
       obscureText: obscureText,
       onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
+      inputFormatters: inputFormatters,
     );
   }
 }

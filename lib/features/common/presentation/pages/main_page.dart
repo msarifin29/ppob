@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ppob/features/auth/auth.dart';
 import 'package:ppob/features/common/common.dart';
+import 'package:ppob/features/transaction/presentation/pages/top_up_page.dart';
 
 class MainPage extends StatefulWidget {
   static const routeName = 'main';
@@ -19,7 +20,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> pages = [
     const HomePage(),
-    const Center(child: Text('Top Up')),
+    const TopUpPage(),
     const Center(child: Text('Transaction')),
     const AccountPage(),
   ];

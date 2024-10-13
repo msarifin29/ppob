@@ -15,7 +15,7 @@ class _BalanceWidgetState extends State<BalanceWidget> {
   final amount = ValueNotifier('');
 
   Future<void> fetch() async {
-    context.read<BalanceProvider>().fetch();
+    context.read<TransactionProvider>().balance();
   }
 
   String maskString(String input) {
@@ -56,14 +56,21 @@ class _BalanceWidgetState extends State<BalanceWidget> {
               ),
             );
           }
-          return Consumer<BalanceProvider>(
+          return Consumer<TransactionProvider>(
             builder: (context, balance, child) {
-              if (isVisible.value) {
-                maskString('${balance.result?.balance}');
+              String formatString() {
+                if (balance.result != null) {
+                  return CurrencyFormat.formatNumber('${balance.result?.balance}');
+                }
+                return '';
               }
+
               return ValueListenableBuilder(
                 valueListenable: isVisible,
                 builder: (context, v, _) {
+                  if (isVisible.value) {
+                    maskString(formatString());
+                  }
                   return ValueListenableBuilder(
                     valueListenable: amount,
                     builder: (context, v, _) {
@@ -99,9 +106,9 @@ class _BalanceWidgetState extends State<BalanceWidget> {
                                 onPressed: () {
                                   isVisible.value = !isVisible.value;
                                   if (isVisible.value) {
-                                    maskString('${balance.result?.balance}');
+                                    maskString(formatString());
                                   } else {
-                                    unmaskString('${balance.result?.balance}');
+                                    unmaskString(formatString());
                                   }
                                 },
                                 icon: Icon(

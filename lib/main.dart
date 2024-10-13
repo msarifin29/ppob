@@ -39,7 +39,8 @@ FutureOr<void> main() async {
         ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
         ChangeNotifierProvider(create: (_) => BannerProvider(repository: commonRepository)),
         ChangeNotifierProvider(create: (_) => ServiceProvider(repository: commonRepository)),
-        ChangeNotifierProvider(create: (_) => BalanceProvider(repository: transactionRepository)),
+        ChangeNotifierProvider(
+            create: (_) => TransactionProvider(repository: transactionRepository)),
       ], child: const MyApp()));
     },
     (error, stackTrace) {

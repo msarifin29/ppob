@@ -2,7 +2,8 @@
 import 'package:ppob/features/transaction/transaction.dart';
 
 abstract class TransactionRepository {
-  Future<BalanceResponse?> balance();
+  Future<BalanceResponse> balance();
+  Future<BalanceResponse> topup(TopUpParam param);
 }
 
 class TransactionRepositoryImpl implements TransactionRepository {
@@ -10,7 +11,12 @@ class TransactionRepositoryImpl implements TransactionRepository {
   TransactionRepositoryImpl({required this.remoteDatasource});
 
   @override
-  Future<BalanceResponse?> balance() async {
+  Future<BalanceResponse> balance() async {
     return await remoteDatasource.balance();
+  }
+
+  @override
+  Future<BalanceResponse> topup(TopUpParam param) async {
+    return await remoteDatasource.topup(param);
   }
 }

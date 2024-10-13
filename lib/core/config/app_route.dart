@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ppob/features/auth/auth.dart';
 import 'package:ppob/features/common/common.dart';
+import 'package:ppob/features/transaction/transaction.dart';
 
 class AppRoute {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -61,6 +62,13 @@ class AppRoute {
               firstName: firstName,
               lastName: lastName,
             );
+          },
+        );
+
+      case TopUpPage.routeName:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const TopUpPage();
           },
         );
 
