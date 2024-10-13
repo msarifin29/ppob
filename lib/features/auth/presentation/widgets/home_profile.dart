@@ -31,6 +31,13 @@ class HomeProfile extends StatelessWidget {
             return Consumer<ProfileProvider>(
               builder: (context, profile, _) {
                 final image = profile.user?.profileImage;
+                String fullName() {
+                  if (profile.user != null) {
+                    return '${profile.user?.firstName} ${profile.user?.lastName}';
+                  }
+                  return '';
+                }
+
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -91,7 +98,7 @@ class HomeProfile extends StatelessWidget {
                         style: Theme.of(context).textTheme.titleMedium!,
                         children: [
                           TextSpan(
-                            text: '${profile.user?.firstName} ${profile.user?.lastName}',
+                            text: fullName(),
                             style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                   fontWeight: FontWeight.bold,
                                 ),
