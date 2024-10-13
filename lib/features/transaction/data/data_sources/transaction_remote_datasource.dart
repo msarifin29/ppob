@@ -31,7 +31,7 @@ class TransactionRemoteDatasourceImpl implements TransactionRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
-        throw Exception(e.toString());
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;
@@ -58,7 +58,7 @@ class TransactionRemoteDatasourceImpl implements TransactionRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
-        throw Exception(e.toString());
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;

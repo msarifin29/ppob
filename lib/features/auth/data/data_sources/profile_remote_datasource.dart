@@ -8,9 +8,9 @@ import 'package:ppob/core/core.dart';
 import 'package:ppob/features/auth/auth.dart';
 
 abstract class ProfileRemoteDatasource {
-  Future<ProfileResponse?> fetch();
-  Future<ProfileResponse?> update(UpdateProfileParam param);
-  Future<ProfileResponse?> updatePhoto(File file);
+  Future<ProfileResponse> fetch();
+  Future<ProfileResponse> update(UpdateProfileParam param);
+  Future<ProfileResponse> updatePhoto(File file);
 }
 
 class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
@@ -18,7 +18,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   ProfileRemoteDatasourceImpl({required this.dio});
 
   @override
-  Future<ProfileResponse?> fetch() async {
+  Future<ProfileResponse> fetch() async {
     const path = '${ApiUrl.endPoint}/profile';
     try {
       final response = await dio.get(
@@ -34,15 +34,15 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
   @override
-  Future<ProfileResponse?> update(UpdateProfileParam param) async {
+  Future<ProfileResponse> update(UpdateProfileParam param) async {
     const path = '${ApiUrl.endPoint}/profile/update';
 
     try {
@@ -60,15 +60,15 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
   @override
-  Future<ProfileResponse?> updatePhoto(File file) async {
+  Future<ProfileResponse> updatePhoto(File file) async {
     const path = '${ApiUrl.endPoint}/profile/image';
 
     List<String>? mimeTypeData = lookupMimeType(file.path, headerBytes: [0xFF, 0xD8])!.split('/');
@@ -99,11 +99,11 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 }
 

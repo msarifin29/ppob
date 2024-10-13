@@ -4,8 +4,8 @@ import 'package:ppob/core/core.dart';
 import 'package:ppob/features/common/common.dart';
 
 abstract class CommonRemoteDatasource {
-  Future<List<BannerResponse>?> banner();
-  Future<List<ServiceResponse>?> services();
+  Future<List<BannerResponse>> banner();
+  Future<List<ServiceResponse>> services();
 }
 
 class CommonRemoteDatasourceImpl implements CommonRemoteDatasource {
@@ -13,7 +13,7 @@ class CommonRemoteDatasourceImpl implements CommonRemoteDatasource {
   CommonRemoteDatasourceImpl({required this.dio});
 
   @override
-  Future<List<BannerResponse>?> banner() async {
+  Future<List<BannerResponse>> banner() async {
     const path = '${ApiUrl.endPoint}/banner';
     try {
       final response = await dio.get(path,
@@ -31,15 +31,15 @@ class CommonRemoteDatasourceImpl implements CommonRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message);
       }
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
   @override
-  Future<List<ServiceResponse>?> services() async {
+  Future<List<ServiceResponse>> services() async {
     const path = '${ApiUrl.endPoint}/services';
     try {
       final response = await dio.get(path,
@@ -57,10 +57,10 @@ class CommonRemoteDatasourceImpl implements CommonRemoteDatasource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message);
       }
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 }

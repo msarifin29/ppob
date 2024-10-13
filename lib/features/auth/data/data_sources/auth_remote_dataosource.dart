@@ -7,13 +7,13 @@ import 'package:ppob/core/core.dart';
 import 'package:ppob/features/auth/auth.dart';
 
 abstract class AuthRemoteDataosource {
-  Future<LoginResponse?> login(LoginParam param);
+  Future<LoginResponse> login(LoginParam param);
   Future<bool> register(RegisterParam param);
 }
 
 class AuthRemoteDataosourceImpl implements AuthRemoteDataosource {
   @override
-  Future<LoginResponse?> login(LoginParam param) async {
+  Future<LoginResponse> login(LoginParam param) async {
     const path = '${ApiUrl.endPoint}/login';
     try {
       final response = await Dio().post(
@@ -32,11 +32,11 @@ class AuthRemoteDataosourceImpl implements AuthRemoteDataosource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;
     }
-    return null;
   }
 
   @override
@@ -59,11 +59,11 @@ class AuthRemoteDataosourceImpl implements AuthRemoteDataosource {
         throw ApiException(status, message);
       } else {
         DioExceptionImpl().handleDioError(e);
+        throw Exception(e.message ?? '');
       }
     } catch (e) {
       rethrow;
     }
-    return false;
   }
 }
 
