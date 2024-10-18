@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-
+import 'package:flutter/services.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:ppob/features/auth/auth.dart';
@@ -34,19 +34,21 @@ FutureOr<void> main() async {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       await initializeDateFormatting('id_ID', null);
-      runApp(MultiProvider(providers: [
-        ChangeNotifierProvider(create: (_) => LoginProvider(repository: authRepository)),
-        ChangeNotifierProvider(create: (_) => RegisterProvider(repository: authRepository)),
-        ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
-        ChangeNotifierProvider(create: (_) => BannerProvider(repository: commonRepository)),
-        ChangeNotifierProvider(create: (_) => ServiceProvider(repository: commonRepository)),
-        ChangeNotifierProvider(
-          create: (_) => TransactionProvider(repository: transactionRepository),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => TransactionHistoryProvider(repository: transactionRepository),
-        ),
-      ], child: const MyApp()));
+      await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((_) {
+        runApp(MultiProvider(providers: [
+          ChangeNotifierProvider(create: (_) => LoginProvider(repository: authRepository)),
+          ChangeNotifierProvider(create: (_) => RegisterProvider(repository: authRepository)),
+          ChangeNotifierProvider(create: (_) => ProfileProvider(repository: profileRepository)),
+          ChangeNotifierProvider(create: (_) => BannerProvider(repository: commonRepository)),
+          ChangeNotifierProvider(create: (_) => ServiceProvider(repository: commonRepository)),
+          ChangeNotifierProvider(
+            create: (_) => TransactionProvider(repository: transactionRepository),
+          ),
+          ChangeNotifierProvider(
+            create: (_) => TransactionHistoryProvider(repository: transactionRepository),
+          ),
+        ], child: const MyApp()));
+      });
     },
     (error, stackTrace) {
       log('Error: $error');
