@@ -46,6 +46,11 @@ class TransactionHistoryProvider with ChangeNotifier {
     _setLoading(false);
   }
 
+  Future<void> refreshTransactions() async {
+    _isLastPage = false;
+    await fetchTransactions(loadMore: false);
+  }
+
   void _setLoading(bool value) {
     _isLoading = value;
     notifyListeners();
