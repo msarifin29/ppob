@@ -6,6 +6,7 @@ export 'presentation/widgets/primary_button.dart';
 export 'presentation/widgets/item_nav_bar.dart';
 export 'presentation/widgets/banner_widget.dart';
 export 'presentation/widgets/service_widget.dart';
+export 'presentation/widgets/shimmer_effect.dart';
 export 'domain/banner_response.dart';
 export 'domain/service_response.dart';
 export 'data/datasources/common_remote_datasource.dart';

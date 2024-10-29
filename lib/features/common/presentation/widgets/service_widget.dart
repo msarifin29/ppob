@@ -68,11 +68,10 @@ class ServicesWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             height: 40,
                             width: 40,
-                            progressIndicatorBuilder: (context, url, downloadProgress) => Container(
-                              height: 30,
+                            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                const ShimmerEffect(
                               width: 30,
-                              alignment: Alignment.center,
-                              child: CircularProgressIndicator(value: downloadProgress.progress),
+                              height: 30,
                             ),
                             errorWidget: (context, url, error) => const Icon(Icons.image),
                           ),
@@ -83,9 +82,7 @@ class ServicesWidget extends StatelessWidget {
                             (service.result ?? [])[i].serviceName,
                             overflow: TextOverflow.clip,
                             textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                                  fontSize: 10,
-                                ),
+                            style: Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 10),
                           ),
                         ),
                       ],

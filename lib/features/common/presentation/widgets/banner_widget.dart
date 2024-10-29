@@ -51,11 +51,10 @@ class BannerWidget extends StatelessWidget {
                         child: CachedNetworkImage(
                           imageUrl: (banner.result ?? [])[i].bannerImage,
                           fit: BoxFit.cover,
-                          progressIndicatorBuilder: (context, url, downloadProgress) => Container(
-                            height: 20,
+                          progressIndicatorBuilder: (context, url, downloadProgress) =>
+                              const ShimmerEffect(
                             width: 20,
-                            alignment: Alignment.center,
-                            child: CircularProgressIndicator(value: downloadProgress.progress),
+                            height: 20,
                           ),
                           errorWidget: (context, url, error) => const Icon(Icons.image),
                         ),
